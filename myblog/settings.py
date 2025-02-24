@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-spwzl)0e&6o82!4lrl6-bvugs##+q4@8t9q^&krb4i!$%^)yu8
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['www.infmax-1.onrender.com', 'infmax-1.onrender.com']
+ALLOWED_HOSTS = ['www.infmax-1.onrender.com', 'infmax-1.onrender.com', '127.0.0.1']
 
 
 # Application definition
@@ -117,10 +117,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [STATIC_DIR]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 
 # Путь для хранения медиафайлов
 MEDIA_URL = '/media/'
