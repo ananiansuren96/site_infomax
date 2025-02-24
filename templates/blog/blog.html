@@ -1,0 +1,117 @@
+{% load static %}
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Blog</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
+</head>
+<body>
+
+    <!-- Header with logo and menu -->
+    <header>
+        <div class="logo">
+            <img src="{% static 'images/infomax-logo.png' %}" alt="Logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="?">Главная</a></li>
+                <li><a href="#">О нас</a></li>
+                <li><a href="#">Новости</a></li>
+                <li><a href="#">Контакты</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content Section -->
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Добро пожаловать на Mini Blog</h1>
+                <p>Читайте свежие новости и интересные статьи</p>
+            </div>
+        </section>
+
+
+
+        <!-- Categories Filter -->
+        <section class="categories">
+            <div class="container">
+                <ul>
+                    <li><a href="javascript:void(0);" onclick="filterPosts('')">Все категории</a></li>
+                    {% for category in categories %}
+                        <li><a href="javascript:void(0);" onclick="filterPosts('{{ category.id }}')"
+                            class="{% if category.id == category.id %}active{% endif %}">{{ category.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </section>
+
+        <!-- Заголовок категории -->
+        <div class="container">
+
+
+            <!-- Сетка с постами -->
+            <div class="post-grid">
+                {% for post in post_list %}
+                    <div class="post">
+                        {% if post.image %}
+                            <a href="{% url 'post_detail' post.id %}"><img src="{{ post.image.url }}" alt="{{ post.title }}"></a>
+                        {% endif %}
+                        <h2><a href="{% url 'post_detail' post.id %}">{{ post.title }}</a></h2>
+                        <p>{{ post.content|truncatewords:30 }}</p>
+                        <span class="author">{{ post.author }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Mini Blog. Все права защищены.</p>
+    </footer>
+
+    <script>
+        // Функция для фильтрации постов по категориям
+        function filterPosts(categoryId) {
+            let url = window.location.href.split('?')[0]; // Получаем текущий URL без параметра category
+            if (categoryId) {
+                url += '?category=' + categoryId; // Добавляем параметр category
+            }
+
+            // Отправляем AJAX запрос
+            fetch(url)
+                .then(response => response.text())
+                .then(html => {
+                    // Обновляем только блок с постами
+                    const newPosts = new DOMParser().parseFromString(html, 'text/html').querySelector('.post-grid').innerHTML;
+                    document.querySelector('.post-grid').innerHTML = newPosts;
+
+                    // Обновляем имя категории в заголовке
+                    if (categoryId) {
+                        const categoryName = document.querySelector(`a[href="?category=${categoryId}"]`).innerText;
+                        document.querySelector('.category-name').innerText = `Категория: ${categoryName}`;
+                    } else {
+                        document.querySelector('.category-name').innerText = 'Все посты';
+                    }
+
+                    // Обновляем активную категорию в списке
+                    const links = document.querySelectorAll('.categories a');
+                    links.forEach(link => {
+                        link.classList.remove('active');
+                    });
+
+                    if (categoryId) {
+                        const activeLink = document.querySelector(`a[href="?category=${categoryId}"]`);
+                        if (activeLink) {
+                            activeLink.classList.add('active');
+                        }
+                    }
+                });
+        }
+    </script>
+
+</body>
+</html>
