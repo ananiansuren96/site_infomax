@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-spwzl)0e&6o82!4lrl6-bvugs##+q4@8t9q^&krb4i!$%^)yu8
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['www.infmax-1.onrender.com', 'infmax-1.onrender.com', '127.0.0.1']
+ALLOWED_HOSTS = ['www.infmax-1.onrender.com', 'infmax-1.onrender.com', '127.0.0.1', 'infomax.space', 'www.infomax.space']
 
 
 # Application definition
