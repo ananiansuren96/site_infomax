@@ -3,7 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mini Blog</title>
+    <title>{{ post.title }}</title>
+    <!-- Open Graph meta tags for social media sharing -->
+    <meta property="og:title" content="{{ post.title }}">
+    <meta property="og:description" content="{{ post.content|truncatewords:20 }}">
+    {% if post.image %}
+        <meta property="og:image" content="{{ post.image.url }}">
+    {% else %}
+        <meta property="og:image" content="{% static 'images/default_image.png' %}">
+    {% endif %}
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:type" content="article">
     <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
 </head>
 <body>
@@ -11,16 +21,9 @@
     <!-- Header with logo and menu -->
     <header>
         <div class="logo">
-            <img src="{% static 'images/infomax-logo.png' %}" alt="Logo">
+            <a href="/"><img src="{% static 'images/infomax-logo.png' %}" alt="Logo"></a>
         </div>
-        <nav>
-            <ul>
-                <li><a href="?">Главная</a></li>
-                <li><a href="#">О нас</a></li>
-                <li><a href="#">Новости</a></li>
-                <li><a href="#">Контакты</a></li>
-            </ul>
-        </nav>
+        
     </header>
 
     <!-- Main Content Section -->
@@ -47,14 +50,28 @@
                 <p>{{ post.content }}</p>
             </div>
             <div class="back-link-details">
-                <a href="/">Назад к блогу</a>
+                <a href="/">Գլխավոր էջ</a>
             </div>
         </div>
     </main>
-
+    <section class="hero">
+        <div style="margin: 0 0 60px 0"><span style="font-size: 16px;">Ամենաընթերցված</span></div>
+        
+        <div class="container-top-post">
+            
+        {% for post in popular_posts %}
+        <div class="post-top">
+            <h3><a href="{% url 'post_detail' post.id %}">{{ post.title }}</a></h3>
+            {% if post.image %}
+                    <a href="{% url 'post_detail' post.id %}"><img src="{{ post.image.url }}" alt="{{ post.title }}"></a>
+            {% endif %}
+        </div>
+        {% endfor %}
+        </div>
+</section>
     <!-- Footer -->
     <footer>
-        <p>&copy; 2025 Mini Blog. Все права защищены.</p>
+        <p>&copy; 2025 IMFOMAX.SPACE</p>
     </footer>
 
 </body>
